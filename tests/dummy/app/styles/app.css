@@ -12,7 +12,7 @@ a:hover {
   color: color(var(--purple) tint(20%));
 }
 
-pre {
-  padding: var(--large);
-  margin: calc(var(--large) * 2);
+div {
+  width: var(--large);
+  height: calc(var(--large) * 2);
 }

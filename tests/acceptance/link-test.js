@@ -16,10 +16,17 @@ test('Validating stylesheet using the DOM', function() {
   visit('/');
 
   andThen(function() {
-    var link = find('a');
-    var pre  = find('pre');
-    equal(link.css('color'), 'rgb(132, 122, 209)', 'Color is able to be set using variable');
-    equal(pre.css('padding'), '10px', 'Padding is set using variable');
-    equal(pre.css('margin'), '20px', 'Margin is set using variable + calc');
+    var body     = Ember.$('body')[0];
+    var a        = document.createElement('a');
+    var aStyle   = window.getComputedStyle(a);
+    var div      = document.createElement('div');
+    var divStyle = window.getComputedStyle(div);
+
+    body.appendChild(a);
+    body.appendChild(div);
+
+    equal(aStyle.getPropertyValue('color'), 'rgb(132, 122, 209)', 'Color is able to be set using variable');
+    equal(divStyle.getPropertyValue('width'), '10px', 'Width is set using variable');
+    equal(divStyle.getPropertyValue('height'), '20px', 'Height is set using variable + calc');
   });
 });
