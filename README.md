@@ -12,7 +12,7 @@ npm install --save-dev ember-myth
 
 ## Usage
 
-By default, this addon will compile `app/styles/<app-name>.css` into `dist/assets/<app-name>.css`.  To change this, use the configure the options object, detailed below, and set `mythOptions.outputFile`.
+By default, this addon will compile `app/styles/<app-name>.css` into `dist/assets/<app-name>.css`.  To change this,  use the configuration object (explained below) and set the property: `outputFile`.
 
 Options can be configured within your `Brocfile.js` or from within `config/environment.js`:
 
