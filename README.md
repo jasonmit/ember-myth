@@ -1,5 +1,7 @@
 # ember-myth
 
+[![Build Status](https://travis-ci.org/jasonmit/ember-myth.svg)](https://travis-ci.org/jasonmit/ember-myth)
+
 Preprocess your CSS using Myth.
 
 > Myth is a preprocessor that lets you write pure CSS without having to worry about slow browser support, or even slow spec approval. It's like a CSS polyfill.
