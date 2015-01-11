@@ -33,6 +33,30 @@ module.exports = function (/* env */) {
 };
 ```
 
+## Myth Example
+
+```css
+/* app.css */
+:root {
+	--purple: #847AD1;
+	--large: 10px;
+}
+
+a {
+	color: var(--purple);
+	transition: color .2s;
+}
+
+a:hover {
+	color: color(var(--purple) tint(20%));
+}
+
+pre {
+	padding: var(--large);
+	margin: calc(var(--large) * 2);
+}
+```
+
 ## Available Options
 - `browsers` - `Array` - an array of [browsers and versions to support](https://github.com/postcss/autoprefixer#browsers).
 - `compress` - `Boolean` - whether to compress the CSS output.

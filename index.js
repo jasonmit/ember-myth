@@ -53,7 +53,7 @@ EmberMyth.prototype = {
 		_.merge(mythOptions, config.mythOptions);
 
 		if ((mythOptions.sourcemap === undefined) && (app.env === 'development')) {
-			mythOptions.sourcemap = true;
+			mythOptions.sourcemap = false;
 		}
 
 		mythOptions.outputFile = mythOptions.outputFile || this.project.name() + '.css';
