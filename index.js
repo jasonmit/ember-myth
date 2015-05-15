@@ -3,18 +3,18 @@
 
 var CachingWriter = require('broccoli-caching-writer');
 var BroccoliMyth  = require('./lib/broccoli-myth');
-var _             = require('lodash');
+var defaults      = require('lodash.defaults');
 
 module.exports = EmberMyth;
 
 function MythPlugin (mythOptions) {
-	this.name   = 'ember-myth';
-	this.ext    = 'css';
-	mythOptions = mythOptions || {};
+	this.name = 'ember-myth';
+	this.ext  = 'css';
 
-	mythOptions.inputFile  = mythOptions.inputFile  || 'app.css';
-	mythOptions.outputFile = mythOptions.outputFile || 'app.css';
-	this.mythOptions       = mythOptions;
+	this.mythOptions = defaults({}, mythOptions, {
+		inputFile: 'app.css',
+		outputFile: 'app.css'
+	});
 };
 
 MythPlugin.prototype = {
@@ -47,16 +47,12 @@ EmberMyth.prototype = {
 	constructor: EmberMyth,
 
 	included: function (app) {
-		var mythOptions = app.options.mythOptions || {};
-		var config      = this.project.config(app.env) || {};
+		var config = this.project.config(app.env) || {};
 
-		_.merge(mythOptions, config.mythOptions);
-
-		if (typeof mythOptions.compress === 'undefined') {
-			mythOptions.compress = app.env === 'production';
-		}
-
-		mythOptions.outputFile = mythOptions.outputFile || this.project.name() + '.css';
+		var mythOptions = defaults({}, app.options.mythOptions, config.mythOptions, {
+			compress: app.env === 'production',
+			outputFile: this.project.name() + '.css'
+		});
 
 		app.registry.add('css', new MythPlugin(mythOptions));
 	}
