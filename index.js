@@ -14,7 +14,7 @@ function MythPlugin (mythOptions) {
 		inputFile: 'app.css',
 		outputFile: 'app.css'
 	});
-};
+}
 
 MythPlugin.prototype = {
 	constructor: MythPlugin,
@@ -40,7 +40,7 @@ MythPlugin.prototype = {
 function EmberMyth (project) {
 	this.project = project;
 	this.name    = 'Ember CLI Myth';
-};
+}
 
 EmberMyth.prototype = {
 	constructor: EmberMyth,
