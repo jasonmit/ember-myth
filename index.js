@@ -1,7 +1,6 @@
 /* jshint node: true */
 'use strict';
 
-var CachingWriter = require('broccoli-caching-writer');
 var BroccoliMyth  = require('./lib/broccoli-myth');
 var defaults      = require('lodash.defaults');
 
