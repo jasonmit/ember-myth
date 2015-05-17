@@ -1,4 +1,5 @@
 # ember-myth
+[![NPM](https://nodei.co/npm/ember-myth.png)](https://npmjs.org/package/ember-myth)
 
 [![Build Status](https://travis-ci.org/jasonmit/ember-myth.svg)](https://travis-ci.org/jasonmit/ember-myth)
 
