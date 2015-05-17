@@ -1,8 +1,10 @@
 /* jshint node: true */
 'use strict';
 
-var BroccoliMyth  = require('./lib/broccoli-myth');
-var defaults      = require('lodash.defaults');
+var defaults     = require('lodash.defaults');
+var checker      = require('ember-cli-version-checker');
+
+var BroccoliMyth = require('./lib/broccoli-myth');
 
 module.exports = EmberMyth;
 
@@ -45,7 +47,12 @@ function EmberMyth (project) {
 EmberMyth.prototype = {
 	constructor: EmberMyth,
 
-	included: function (app) {
+	shouldSetupRegistryInIncluded: function() {
+		return !checker.isAbove(this, '0.2.0');
+	},
+
+	setupPreprocessorRegistry: function(type, registry) {
+		var app    = this.app;
 		var config = this.project.config(app.env) || {};
 
 		var mythOptions = defaults({}, app.options.mythOptions, config.mythOptions, {
@@ -54,5 +61,17 @@ EmberMyth.prototype = {
 		});
 
 		app.registry.add('css', new MythPlugin(mythOptions));
+	},
+
+	included: function (app) {
+		this.app = app;
+
+		if (this._super) {
+			this._super.included.apply(this, arguments);
+		}
+
+		if (this.shouldSetupRegistryInIncluded()) {
+			this.setupPreprocessorRegistry('parent', app.registry);
+		}
 	}
 };
