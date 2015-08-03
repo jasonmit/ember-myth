@@ -4,42 +4,37 @@
 var defaults     = require('lodash.defaults');
 var checker      = require('ember-cli-version-checker');
 var path         = require('path');
-
-var BroccoliMyth = require('./lib/broccoli-myth');
+var MythCompiler = require('./lib/broccoli-myth');
 
 module.exports = EmberMyth;
 
-function MythPlugin (mythOptions) {
+function MythPlugin(options) {
 	this.name = 'ember-myth';
 	this.ext  = 'css';
-	this.mythOptions = defaults({}, mythOptions);
+	this.options = defaults({}, options);
 }
 
 MythPlugin.prototype = {
 	constructor: MythPlugin,
 
 	toTree: function (tree, inputPath, outputPath) {
+		var options = this.options;
 		var trees = [];
 
 		if (tree) {
 			trees.push(tree);
 		}
 
-		// todo: look into this `paths`
-		if (this.mythOptions.paths) {
-			trees = trees.concat(this.mythOptions.paths);
-		}
+		inputPath  = path.join(inputPath, options.inputFile);
+		outputPath = path.join(outputPath, options.outputFile);
 
-		inputPath  += '/' + this.mythOptions.inputFile;
-		outputPath += '/' + this.mythOptions.outputFile;
-
-		return new BroccoliMyth(trees, inputPath, outputPath, this.mythOptions);
+		return new MythCompiler(trees, inputPath, outputPath, options);
 	}
 };
 
 function EmberMyth (project) {
 	this.project = project;
-	this.name    = 'Ember CLI Myth';
+	this.name = 'Ember CLI Myth';
 }
 
 EmberMyth.prototype = {
@@ -51,18 +46,18 @@ EmberMyth.prototype = {
 
 	options: function(app) {
 		var config = this.project.config(app.env) || {};
-		var stylesDir;
+		var root = app.project.root;
 
 		var mythOptions = defaults({}, app.options.mythOptions, config.mythOptions, {
-			paths: 'app/styles',
+			paths: [root],
 			inputFile: 'app.css',
-			outputFile: 'app.css',
+			outputFile: this.project.name() + '.css',
 			compress: app.env === 'production'
 		});
 
 		if (!mythOptions.source) {
-			stylesDir = app.options.trees.styles.dir || app.options.trees.styles
-			mythOptions.source = path.join(app.project.root, stylesDir, mythOptions.inputFile);
+			var styles = app.options.trees.styles.dir || app.options.trees.styles
+			mythOptions.source = path.join(root, styles, mythOptions.inputFile);
 		}
 
 		return mythOptions;
@@ -72,14 +67,19 @@ EmberMyth.prototype = {
 		var app = registry.app;
 		var mythOptions = this.options(app);
 		registry.add('css', new MythPlugin(mythOptions));
+
+		// prevent conflict with broccoli-myth if it's installed
+		if (registry.remove) {
+			registry.remove('css', 'broccoli-myth');
+		}
 	},
 
-	included: function (app) {
-		this.app = app;
-
-		if (this._super) {
+	included: function(app) {
+		if (this._super && this._super.included) {
 			this._super.included.apply(this, arguments);
 		}
+
+		this.app = app;
 
 		if (this.shouldSetupRegistryInIncluded()) {
 			this.setupPreprocessorRegistry('parent', app.registry);

@@ -8,7 +8,7 @@ Preprocess your CSS using Myth.
 ## Installation
 
 ```
-npm install --save-dev ember-myth
+ember install ember-myth
 ```
 
 ## Usage
@@ -18,11 +18,16 @@ By default, this addon will compile `app/styles/<app-name>.css` into `dist/asset
 Options can be configured within your `Brocfile.js` or from within `config/environment.js`:
 
 ```javascript
-// Brocfile.js
-var app = new EmberApp({
-	mythOptions: {...}
-	...
-});
+// ember-cli-build.js
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function(defaults) {
+  var app = new EmberApp(defaults, {
+    mythOptions: {...}
+  });
+
+  return app.toTree();
+};
 ```
 
 ```javascript
